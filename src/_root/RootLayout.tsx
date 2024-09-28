@@ -1,6 +1,9 @@
 const RootLayout = () => {
+
   return (
-    <div>RootLayout</div>
+    <>
+      <h1>root layout</h1>
+    </>
   )
 }
 
