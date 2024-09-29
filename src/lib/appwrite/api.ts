@@ -54,34 +54,47 @@ export async function saveUserToDatabase(user: {
 
 export async function signInAccount(user: { email: string; password: string }) {
    try {
-      const seasion = await account.createSession(
+      // Check if the user already has an active session
+      const currentAccount = await getCurrentUser();
+      if (currentAccount) {
+         console.log("Session already exists for user:", currentAccount);
+         return currentAccount; // Return if session already exists
+      }
+
+      // Create a new session if no active session exists
+      const session = await account.createEmailPasswordSession(
          user.email,
          user.password,
       );
 
-      return seasion;
+      return session;
    } catch (error) {
-      console.log(error);
+      console.error("Error signing in:", error);
+      return error;
    }
 }
+
 
 export async function getCurrentUser() {
    try {
       const currentAccount = await account.get();
+      console.log(currentAccount);
       if (!currentAccount) {
-         throw Error;
+         return null;
       }
 
       const currentUser = await database.listDocuments(
          appwriteConfig.databaseId,
          appwriteConfig.userCollectonId,
          [Query.equal('accountId', currentAccount.$id)]
-      )
-      if (!currentUser) {
-         throw Error;
+      );
+
+      if (currentUser.documents.length === 0) {
+         return null;
       }
       return currentUser.documents[0];
    } catch (error) {
-      console.log(error);
+      console.error("Error fetching current user:", error);
+      return null;
    }
 }
