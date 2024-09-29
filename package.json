@@ -16,6 +16,7 @@
     "@radix-ui/react-slot": "^1.1.0",
     "@splinetool/react-spline": "^4.0.0",
     "@splinetool/runtime": "^1.9.28",
+    "appwrite": "^14.0.1",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
     "lucide-react": "^0.446.0",
