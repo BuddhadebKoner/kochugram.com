@@ -57,8 +57,8 @@ export async function signInAccount(user: { email: string; password: string }) {
       // Check if the user already has an active session
       const currentAccount = await getCurrentUser();
       if (currentAccount) {
-         console.log("Session already exists for user:", currentAccount);
-         return currentAccount; // Return if session already exists
+         // console.log("Session already exists for user:", currentAccount);
+         return currentAccount;
       }
 
       // Create a new session if no active session exists
@@ -74,11 +74,10 @@ export async function signInAccount(user: { email: string; password: string }) {
    }
 }
 
-
 export async function getCurrentUser() {
    try {
       const currentAccount = await account.get();
-      console.log(currentAccount);
+      // console.log(currentAccount);
       if (!currentAccount) {
          return null;
       }
@@ -96,5 +95,16 @@ export async function getCurrentUser() {
    } catch (error) {
       console.error("Error fetching current user:", error);
       return null;
+   }
+}
+
+
+export async function signOutAccount() {
+   try {
+      const seasion = await account.deleteSession('current');
+      // console.log("Session deleted:", seasion);
+      return seasion;
+   } catch (error) {
+      console.log(error);
    }
 }

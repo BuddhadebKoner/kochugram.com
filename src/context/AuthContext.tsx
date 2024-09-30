@@ -70,7 +70,7 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
       // Call the checkUser on component mount
       checkUser();
-   }, [navigate]);
+   }, []);
 
    const value = {
       user,
