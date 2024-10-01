@@ -5,50 +5,111 @@ import { Button } from "@/components/ui/button"
 import {
    Form,
    FormControl,
-   FormDescription,
    FormField,
    FormItem,
    FormLabel,
    FormMessage,
 } from "@/components/ui/form"
+import { Textarea } from "../ui/textarea"
 import { Input } from "@/components/ui/input"
-import { formSchema } from "@/lib/validation"
+import { postValidation } from "@/lib/validation"
+import FileUploader from "../shared/FileUploader"
+import { Models } from "appwrite"
 
-const PostForm = () => {
+type PostFormsProps = {
+   post?: Models.Document;
+}
+
+const PostForm = ({ post }: PostFormsProps) => {
    // 1. Define your form.
-   const form = useForm<z.infer<typeof formSchema>>({
-      resolver: zodResolver(formSchema),
+   const form = useForm<z.infer<typeof postValidation>>({
+      resolver: zodResolver(postValidation),
       defaultValues: {
-         username: "",
+         caption: post ? post?.caption : "",
+         file: [],
+         location: post ? post?.location : "",
+         tags: post ? post.tags.join(',') : ""
       },
    })
 
    // 2. Define a submit handler.
-   function onSubmit(values: z.infer<typeof formSchema>) {
+   function onSubmit(values: z.infer<typeof postValidation>) {
       // Do something with the form values.
       // ✅ This will be type-safe and validated.
       console.log(values)
    }
    return (
       <Form {...form}>
-         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+         <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col gap-9 w-full max-w-5xl">
             <FormField
                control={form.control}
-               name="username"
+               name="caption"
                render={({ field }) => (
                   <FormItem>
-                     <FormLabel>Username</FormLabel>
+                     <FormLabel className="shad-form_lable">Caption</FormLabel>
                      <FormControl>
-                        <Input placeholder="shadcn" {...field} />
+                        <Textarea {...field}
+                           className="shad-textarea custom-scrollbar shad-input"
+                           placeholder="Write caprtions" />
                      </FormControl>
-                     <FormDescription>
-                        This is your public display name.
-                     </FormDescription>
-                     <FormMessage />
+                     <FormMessage className="shad-form_message" />
                   </FormItem>
                )}
             />
-            <Button type="submit">Submit</Button>
+            <FormField
+               control={form.control}
+               name="file"
+               render={({ field }) => (
+                  <FormItem>
+                     <FormLabel className="shad-form_lable">Add Photos</FormLabel>
+                     <FormControl>
+                        <FileUploader
+                           fieldChnage={field.onChange}
+                           mediaUrl={post?.mediaUrl}
+                        />
+                     </FormControl>
+                     <FormMessage className="shad-form_message" />
+                  </FormItem>
+               )}
+            />
+            <FormField
+               control={form.control}
+               name="location"
+               render={({ field }) => (
+                  <FormItem>
+                     <FormLabel className="shad-form_lable">Enter Loacation</FormLabel>
+                     <FormControl>
+                        <Input {...field} type="text" className="shad-input" placeholder="Enter Your location" />
+                     </FormControl>
+                     <FormMessage className="shad-form_message" />
+                  </FormItem>
+               )}
+            />
+            <FormField
+               control={form.control}
+               name="tags"
+               render={({ field }) => (
+                  <FormItem>
+                     <FormLabel className="shad-form_lable">Add tags (separated by comma " ,")</FormLabel>
+                     <FormControl>
+                        <Input {...field}
+                           type="text"
+                           className="shad-input"
+                           placeholder="Tech, Nature, Fassion" />
+                     </FormControl>
+                     <FormMessage className="shad-form_message" />
+                  </FormItem>
+               )}
+            />
+            <div className="w-full flex flex-col gap-5 md:items-center md:justify-end md:flex-row">
+               <Button
+                  type="button"
+                  className="shad-button_dark_4">Cancel</Button>
+               <Button
+                  type="submit"
+                  className="shad-button_primary whitespace no-wrap"
+               >Submit</Button>
+            </div>
          </form>
       </Form>
    )

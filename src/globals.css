@@ -263,7 +263,7 @@
   }
 
   .shad-input {
-    @apply h-12 bg-dark-4 border-none placeholder:text-light-4 focus-visible:ring-1 focus-visible:ring-offset-1 ring-offset-primary-500 !important;
+    @apply h-12 bg-dark-4 border-none placeholder:text-light-4 focus-visible:ring-1 focus-visible:ring-offset-1 ring-offset-primary-500 rounded-[5px] !important;
   }
 
   .shad-textarea {
@@ -272,10 +272,14 @@
 
   /* Button */
   .shad-button_primary {
-    @apply bg-primary-500 hover:bg-primary-600 text-light-1 flex gap-2 !important;
+    @apply bg-primary-500 hover:bg-primary-600 text-light-1 flex gap-2 rounded-[5px] !important;
   }
 
   .shad-button_secondary {
     @apply bg-dark-3 hover:bg-dark-4 text-light-1 flex gap-2 !important;
+  }
+
+  .shad-button_dark_4 {
+    @apply bg-dark-4 hover:bg-dark-4 text-light-1 flex gap-2 rounded-[5px] !important;
   }
 }

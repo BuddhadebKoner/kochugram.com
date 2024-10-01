@@ -13,6 +13,9 @@ export const signinValidarion = z.object({
    password: z.string().min(4).max(50),
 })
 
-export const formSchema = z.object({
-   username: z.string().min(1, "Username is required"),
+export const postValidation = z.object({
+   caption: z.string().min(5).max(2200),
+   file: z.custom<File[]>(),
+   location: z.string().min(2).max(100),
+   tags: z.string()
 })
