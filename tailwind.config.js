@@ -17,13 +17,13 @@ export default {
   	},
   	extend: {
   		colors: {
-  			'primary-500': '#877EFF',
-  			'primary-600': '#5D5FEF',
+  			'primary-500': '#F2613F',
+  			'primary-600': '#9B3922',
   			'secondary-500': '#FFB620',
   			'off-white': '#D0DFFF',
   			red: '#FF5A5A',
-  			'dark-1': '#000000',
-  			'dark-2': '#09090A',
+  			'dark-1': '#151515',
+  			'dark-2': '#0C0C0C',
   			'dark-3': '#101012',
   			'dark-4': '#1F1F22',
   			'light-1': '#FFFFFF',
