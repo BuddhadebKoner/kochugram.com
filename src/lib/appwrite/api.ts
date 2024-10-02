@@ -110,26 +110,21 @@ export async function signOutAccount() {
 }
 
 export async function createPost(post: INewPost) {
+   // console.log("post object :", post, "file in 0 index", post.file);
    try {
-      // Check if post.file is an array or a single file
-      const file = Array.isArray(post.file) ? post.file[0] : post.file;
-
-      if (!file) throw new Error("No file provided");
-
-      // Upload the file
-      const uploadedFile = await Uploadfile(file);
-      if (!uploadedFile) throw new Error("File upload failed");
-
+      // upload file to appwrite storage 
+      const uploadedFile = await Uploadfile(post.file);
+      // console.log("this is uploadfile :", uploadedFile);
+      if (!uploadedFile) throw Error;
+      // get file url
       const fileUrl = getFilePreview(uploadedFile.$id);
       if (!fileUrl) {
-         deleteFile(uploadedFile.$id);
-         throw new Error("File preview generation failed");
+         await deleteFile(uploadedFile.$id);
+         throw Error;
       }
-
-      // Convert tags to array 
-      const tags = post.tags?.replace(/\s/g, '').split(',') || [];
-
-      // Create the new post document
+      // Convert tags into array
+      const tags = post.tags?.replace(/ /g, "").split(",") || [];
+      // Create post object
       const newPost = await database.createDocument(
          appwriteConfig.databaseId,
          appwriteConfig.postCollectionId,
@@ -138,15 +133,15 @@ export async function createPost(post: INewPost) {
             creater: post.userId,
             caption: post.caption,
             imageUrl: fileUrl,
-            ImageId: uploadedFile.$id,
+            imageId: uploadedFile.$id,
             location: post.location,
             tags: tags,
          }
-      );
+      )
 
       if (!newPost) {
          await deleteFile(uploadedFile.$id);
-         throw new Error("Post creation failed");
+         throw Error;
       }
 
       return newPost;
@@ -155,23 +150,21 @@ export async function createPost(post: INewPost) {
    }
 }
 
-
-
 // supporting functions that many time will be used 
 export async function Uploadfile(file: File) {
+   // console.log("file reciving uploadfile :", file);
    try {
       if (!file) throw new Error("File not provided");
 
       const uploadedFile = await storage.createFile(
          appwriteConfig.storageId,
          ID.unique(),
-         file 
+         file
       );
 
       return uploadedFile;
    } catch (error) {
       console.log('Error uploading file:', error);
-      throw error;
    }
 }
 
@@ -194,8 +187,6 @@ export function getFilePreview(fileId: string) {
       console.log(error);
    }
 }
-
-// Argument of type '"top"' is not assignable to parameter of type 'ImageGravity | undefined'.ts(2345)
 
 export async function deleteFile(fileId: string) {
    try {
