@@ -23,6 +23,10 @@ export function formatDate(dateString: string): string {
   if (weeksAgo >= 1) return `${weeksAgo}w`;
   if (daysAgo >= 1) return `${daysAgo}d`;
   if (hoursAgo >= 1) return `${hoursAgo}h`;
-  if (minutesAgo >= 1) return `${minutesAgo}m`;
+  if (minutesAgo >= 1) return `just now`;
   return `${secondsAgo}s`;
 }
+
+export const checkIsLiked = (likeList: string[], userId: string) => {
+  return likeList.includes(userId);
+};
