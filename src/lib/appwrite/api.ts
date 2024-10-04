@@ -29,7 +29,6 @@ export async function createUserAccount(user: INewUser) {
    }
 }
 
-
 export async function saveUserToDatabase(user: {
    accountId: string,
    email: string,
@@ -74,6 +73,32 @@ export async function signInAccount(user: { email: string; password: string }) {
    }
 }
 
+// export async function AuthWithGoogle() {
+//    try {
+//       // Start the Google OAuth process
+//       const res = account.createOAuth2Session(
+//          'google',
+//          'http://localhost:5173/',
+//          `http://localhost:5173/sign-up`,
+//       );
+//       if (!res) throw Error("OAuth2Session failed");
+
+//       // Fetch the current user after OAuth session
+//       const currentUser = await getCurrentUser();
+
+//       if (!currentUser) {
+//          // If the user doesn't exist, navigate to sign-up page
+//          window.location.href = `http://localhost:5173/sign-up`; // Modify to your route
+//       } else {
+//          // If the user exists, log them in or fetch their details
+//          await signInAccount(currentUser);
+//       }
+//    } catch (error) {
+//       console.log("Google Sign-in Error:", error);
+//    }
+// }
+
+
 export async function getCurrentUser() {
    try {
       const currentAccount = await account.get();
@@ -112,7 +137,7 @@ export async function signOutAccount() {
 export async function createPost(post: INewPost) {
    try {
       // upload file to appwrite storage 
-      console.log("post object :", post, "file in 0 index", post.file);
+      // console.log("post object :", post, "file in 0 index", post.file);
       const uploadedFile = await uploadfile(post.file);
       // console.log("this is uploadfile :", uploadedFile);
       if (!uploadedFile) throw Error;
@@ -161,7 +186,7 @@ export async function uploadfile(file: File) {
          ID.unique(),
          file
       );
-      console.log("Uploaded file:", uploadedFile);
+      // console.log("Uploaded file:", uploadedFile);
       return uploadedFile;
    } catch (error) {
       console.log('Error uploading file:', error);
@@ -234,11 +259,11 @@ export async function updatePost(post: IUpdatePost) {
 
       if (hasFileToUpdate) {
          // Upload new file to Appwrite storage
-         console.log("file in 0 index :", post.file);
+         // console.log("file in 0 index :", post.file);
          const uploadedFile = await uploadfile(post.file);
          if (!uploadedFile) throw new Error("File upload failed");
 
-         console.log("this is uploaded file :", uploadedFile);
+         // console.log("this is uploaded file :", uploadedFile);
 
          // Get new file URL
          const fileUrl = getFilePreview(uploadedFile.$id);

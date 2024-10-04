@@ -39,7 +39,7 @@ const PostCard = ({ post }: PostCardProps) => {
 
    return (
       <div className="post-card flex flex-1 flex-row gap-5 relative">
-         <div className="w-fit h-full">
+         <div className="w-fit h-fit">
             <Link to={`/profile/${post.creator.$id}`}>
                <img
                   src={post?.creator?.imageUrl || 'assets/images/profile-placeholder.jpg'}
@@ -60,7 +60,7 @@ const PostCard = ({ post }: PostCardProps) => {
                   to={`/update-post/${post.$id}`}
                >
                   <img
-                     src="assets/icons/edit.svg"
+                     src="/assets/icons/edit.svg"
                      width={20}
                      height={20}
                      alt="edit" />
@@ -79,7 +79,7 @@ const PostCard = ({ post }: PostCardProps) => {
                      ))}
                   </ul>
                </div>
-               <div className="w-full h-full">
+               <div className="w-full h-fit">
                   <img
                      src={post.imageUrl}
                      className="post-card_img"

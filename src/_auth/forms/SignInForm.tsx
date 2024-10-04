@@ -18,6 +18,7 @@ import Loader from "@/components/shared/Loader"
 import { Link, useNavigate } from "react-router-dom"
 import { useSignInAccount } from "@/lib/react-query/queriesAndMutation"
 import { useUserContext } from "@/context/AuthContext"
+// import GoogleAuth from "./GoogleAuth"
 
 const SignInForm = () => {
   const { toast } = useToast()
@@ -108,7 +109,7 @@ const SignInForm = () => {
               <div className="flex center gap-2">Sign in</div>
             )}
           </Button>
-
+          {/* <GoogleAuth /> */}
           {/* Redirect to Signup */}
           <p className="text-small-regular text-light-2 text-center mt-2">
             Don’t have an account?

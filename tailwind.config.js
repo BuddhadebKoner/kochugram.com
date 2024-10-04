@@ -29,7 +29,7 @@ export default {
   			'light-1': '#FFFFFF',
   			'light-2': '#EFEFEF',
   			'light-3': '#7878A3',
-  			'light-4': '#5C5C7B',
+  			'light-4': '#8c8e90',
   			background: 'hsl(var(--background))',
   			foreground: 'hsl(var(--foreground))',
   			card: {

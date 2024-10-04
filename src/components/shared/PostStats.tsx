@@ -4,11 +4,21 @@ import { checkIsLiked } from "@/lib/utils";
 import { Models } from "appwrite";
 import { useEffect, useState } from "react";
 import Loader from "./Loader";
+import {
+   DropdownMenu,
+   DropdownMenuContent,
+   DropdownMenuItem,
+   DropdownMenuLabel,
+   DropdownMenuSeparator,
+   DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
+
+
+
 type PostStatsProps = {
    post: Models.Document;
    userId: string;
 }
-
 const PostStats = ({ post, userId }: PostStatsProps) => {
    const likesList = post.likes.map((user: Models.Document) => user.$id);
    const [likes, setLikes] = useState(likesList);
@@ -65,14 +75,14 @@ const PostStats = ({ post, userId }: PostStatsProps) => {
 
 
    return (
-      <div className="flex flex-1 gap-5 justify-center items-center">
+      <div className="flex flex-1 gap-5 justify-center items-center h-fit">
          <button className="flex flex-1 gap-2 items-center">
             {isLikeing ? <Loader /> :
                <img
                   onClick={handleLikePosts}
                   src={checkIsLiked(likes, userId) ?
-                     "assets/icons/liked.svg" :
-                     "assets/icons/like.svg"
+                     "/assets/icons/liked.svg" :
+                     "/assets/icons/like.svg"
                   }
                   alt="save"
                />
@@ -83,16 +93,23 @@ const PostStats = ({ post, userId }: PostStatsProps) => {
             {
                isDeletingSavePost || isSavingPost ? <Loader /> :
                   <img
-                     src={isSaved ? "assets/icons/saved.svg" : "assets/icons/save.svg"}
+                     src={isSaved ? "/assets/icons/saved.svg" : "/assets/icons/save.svg"}
                   />
             }
          </button>
-         <button onClick={shareablePostLink}>
-            <img
-               src="assets/icons/share.svg"
-               alt="share"
-            />
-         </button>
+         <div>
+            <DropdownMenu>
+               <DropdownMenuTrigger>
+                  <img
+                     src="/assets/icons/share.svg"
+                     alt="share"
+                  />
+               </DropdownMenuTrigger>
+               <DropdownMenuContent>
+                  copy link
+               </DropdownMenuContent>
+            </DropdownMenu>
+         </div>
       </div>
    )
 }
