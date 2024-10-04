@@ -9,7 +9,7 @@ interface FileUploaderProps {
 
 const FileUploader = ({ fieldChnage, mediaUrl }: FileUploaderProps) => {
   const [file, setFile] = useState<File[]>([])
-  const [fileUrl, setFilesUrl] = useState<string | null>(null)
+  const [fileUrl, setFilesUrl] = useState(mediaUrl)
 
   const onDrop = useCallback((acceptedFiles: File[]) => {
     // Do something with the files
@@ -37,7 +37,7 @@ const FileUploader = ({ fieldChnage, mediaUrl }: FileUploaderProps) => {
             <div className='flex flex-1 justify-center w-fit h-fit p-5 lg:p-10'>
               <img
                 src={fileUrl}
-                alt="iamge" 
+                alt="iamge"
                 className='file_uploader-img'
               />
             </div>
@@ -46,7 +46,7 @@ const FileUploader = ({ fieldChnage, mediaUrl }: FileUploaderProps) => {
         ) : (
           <div className='file_uploader-box'>
             <img
-              src="assets/icons/file-upload.svg"
+              src="/assets/icons/file-upload.svg"
               alt='file-upload'
               width={100}
               height={100}

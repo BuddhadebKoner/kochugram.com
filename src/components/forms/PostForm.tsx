@@ -2,7 +2,7 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
 import { useNavigate } from "react-router-dom"
-import { Button } from "@/components/ui/button"
+import { Models } from "appwrite"
 import {
    Form,
    FormControl,
@@ -11,25 +11,23 @@ import {
    FormLabel,
    FormMessage,
 } from "@/components/ui/form"
+import { postValidation } from "@/lib/validation"
+import { toast } from "@/hooks/use-toast"
+import { Button } from "@/components/ui/button"
 import { Textarea } from "../ui/textarea"
 import { Input } from "@/components/ui/input"
-import { postValidation } from "@/lib/validation"
 import FileUploader from "../shared/FileUploader"
-import { Models } from "appwrite"
-import {  useCreatePost } from "@/lib/react-query/queriesAndMutation"
 import { useUserContext } from "@/context/AuthContext"
-import { toast } from "@/hooks/use-toast"
+import { useCreatePost, useUpdatePost } from "@/lib/react-query/queriesAndMutation"
 
-type PostFormsProps = {
+type PostFormProps = {
    post?: Models.Document;
-}
+   action: "Create" | "Update";
+};
 
-const PostForm = ({ post }: PostFormsProps) => {
+const PostForm = ({ post, action }: PostFormProps) => {
    const navigate = useNavigate();
-
-   const { mutateAsync: createPost, isPending: IsLoadingCreate } = useCreatePost();
    const { user } = useUserContext();
-
 
    // 1. Define your form.
    const form = useForm<z.infer<typeof postValidation>>({
@@ -40,24 +38,46 @@ const PostForm = ({ post }: PostFormsProps) => {
          location: post ? post?.location : "",
          tags: post ? post.tags.join(',') : ""
       },
-   })
+   });
 
-   // 2. Define a submit handler.
-   async function onSubmit(values: z.infer<typeof postValidation>) {
+   // query hooks
+   const { mutateAsync: createPost, isPending: IsLoadingCreate } = useCreatePost();
+   const { mutateAsync: updatePost, isPending: IsLoadingUpdate } = useUpdatePost();
+
+   const handleSubmit = async (value: z.infer<typeof postValidation>) => {
+      if (post && action == "Update") {
+         const updatedPost = await updatePost({
+            ...value,
+            postId: post.$id,
+            imageId: post?.imageId,
+            imageUrl: post?.imageUrl,
+         });
+         // console.log("updated post :", updatedPost);
+         if (!updatedPost) {
+            toast({
+               title: `${action} failed. Please try again.`,
+            });
+         }
+         navigate(`/post/${post.$id}`);
+         return;
+      }
+
       const newPost = await createPost({
-         ...values,
-         userId: user.id
-      })
+         ...value,
+         userId: user.id,
+      });
 
       if (!newPost) {
-         toast({ title: "please try again" })
+         toast({ title: "Please try again" });
       }
       navigate('/');
-   }
+   };
 
    return (
       <Form {...form}>
-         <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col gap-9 w-full max-w-5xl">
+         <form
+            onSubmit={form.handleSubmit(handleSubmit)}
+            className="flex flex-col gap-9 w-full max-w-5xl">
             <FormField
                control={form.control}
                name="caption"
@@ -67,7 +87,7 @@ const PostForm = ({ post }: PostFormsProps) => {
                      <FormControl>
                         <Textarea {...field}
                            className="shad-textarea custom-scrollbar shad-input"
-                           placeholder="Write caprtions" />
+                           placeholder="Write captions" />
                      </FormControl>
                      <FormMessage className="shad-form_message" />
                   </FormItem>
@@ -82,7 +102,7 @@ const PostForm = ({ post }: PostFormsProps) => {
                      <FormControl>
                         <FileUploader
                            fieldChnage={field.onChange}
-                           mediaUrl={post?.mediaUrl}
+                           mediaUrl={post?.imageUrl}
                         />
                      </FormControl>
                      <FormMessage className="shad-form_message" />
@@ -94,7 +114,7 @@ const PostForm = ({ post }: PostFormsProps) => {
                name="location"
                render={({ field }) => (
                   <FormItem>
-                     <FormLabel className="shad-form_lable">Enter Loacation</FormLabel>
+                     <FormLabel className="shad-form_lable">Enter Location</FormLabel>
                      <FormControl>
                         <Input {...field} type="text" className="shad-input" placeholder="Enter Your location" />
                      </FormControl>
@@ -112,24 +132,19 @@ const PostForm = ({ post }: PostFormsProps) => {
                         <Input {...field}
                            type="text"
                            className="shad-input"
-                           placeholder="Tech, Nature, Fassion" />
+                           placeholder="Tech, Nature, Fashion" />
                      </FormControl>
                      <FormMessage className="shad-form_message" />
                   </FormItem>
                )}
             />
             <div className="w-full flex flex-col gap-5 md:items-center md:justify-end md:flex-row">
-               <Button
-                  type="button"
-                  className="shad-button_dark_4">Cancel</Button>
-               <Button
-                  type="submit"
-                  className="shad-button_primary whitespace no-wrap"
-               >Submit</Button>
+               <Button type="button" className="shad-button_dark_4">Cancel</Button>
+               <Button type="submit" className="shad-button_primary whitespace no-wrap">Submit</Button>
             </div>
          </form>
       </Form>
-   )
-}
+   );
+};
 
-export default PostForm
+export default PostForm;

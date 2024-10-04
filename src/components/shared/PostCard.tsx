@@ -79,9 +79,9 @@ const PostCard = ({ post }: PostCardProps) => {
                      ))}
                   </ul>
                </div>
-               <div>
+               <div className="w-full h-full">
                   <img
-                     src={post.imageUrl || 'assets/images/profile-placeholder.jpg'}
+                     src={post.imageUrl}
                      className="post-card_img"
                      alt={post.caption} />
                </div>
