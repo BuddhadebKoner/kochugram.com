@@ -1,8 +1,6 @@
+import Loader from '@/components/shared/Loader';
 import { Suspense, lazy, useState, useEffect } from 'react';
 import { Outlet, Navigate } from 'react-router-dom'
-
-
-// const Spline = lazy(() => import('@splinetool/react-spline'));
 
 const AuthLayout = () => {
   const isAuthenticated = false;
@@ -32,11 +30,15 @@ const AuthLayout = () => {
             </section>
             <div className='hidden xl:block h-screen w-1/2 object-cover bg-no-repeat bg-black'>
               {/* Conditionally render Spline only for non-mobile devices */}
-              {/* {!isMobile && (
-                <Suspense fallback={<div>Loading 3D Model...</div>}>
-                  <Spline scene="https://prod.spline.design/TML5oS2HnRgLZlcd/scene.splinecode" />
+              {!isMobile && (
+                  <Suspense fallback={<Loader />}>
+                    <img
+                      className='h-full w-full object-cover'
+                      src="abstract-image.jpg"
+                      alt=""
+                    />
                 </Suspense>
-              )} */}
+              )} 
             </div>
           </>
         )

@@ -1,26 +1,18 @@
-import { toast } from "@/hooks/use-toast";
 import { useDeleteSavePost, useGetCurrentUser, useLikePost, useSavePost } from "@/lib/react-query/queriesAndMutation";
 import { checkIsLiked } from "@/lib/utils";
 import { Models } from "appwrite";
 import { useEffect, useState } from "react";
 import Loader from "./Loader";
-import {
-   DropdownMenu,
-   DropdownMenuContent,
-   DropdownMenuItem,
-   DropdownMenuLabel,
-   DropdownMenuSeparator,
-   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
+import { toast } from "@/hooks/use-toast";
 
 
 
 type PostStatsProps = {
-   post: Models.Document;
+   post?: Models.Document;
    userId: string;
 }
 const PostStats = ({ post, userId }: PostStatsProps) => {
-   const likesList = post.likes.map((user: Models.Document) => user.$id);
+   const likesList = post?.likes.map((user: Models.Document) => user.$id);
    const [likes, setLikes] = useState(likesList);
    const [isSaved, setIsSaved] = useState(false);
 
@@ -29,7 +21,7 @@ const PostStats = ({ post, userId }: PostStatsProps) => {
    const { mutate: deleetPost, isPending: isDeletingSavePost } = useDeleteSavePost();
 
    const { data: currentUser } = useGetCurrentUser();
-   const savePostRecord = currentUser?.save.find((record: Models.Document) => record.post.$id === post.$id);
+   const savePostRecord = currentUser?.save.find((record: Models.Document) => record.post.$id === post?.$id);
 
    useEffect(() => {
       setIsSaved(!!savePostRecord); // here !! is used to convert the value to boolean
@@ -46,7 +38,9 @@ const PostStats = ({ post, userId }: PostStatsProps) => {
       }
 
       setLikes(newLikes);
-      likePost({ postId: post.$id, likesArray: newLikes });
+      if (post) {
+         likePost({ postId: post.$id, likesArray: newLikes });
+      }
    }
    const handleSavePosts = (e: React.MouseEvent) => {
       e.stopPropagation();
@@ -55,20 +49,24 @@ const PostStats = ({ post, userId }: PostStatsProps) => {
          setIsSaved(false);
          deleetPost(savePostRecord.$id);
       } else {
-         savePost({ postId: post.$id, userId });
+         if (post?.$id) {
+            savePost({ postId: post.$id, userId });
+            setIsSaved(true);
+         }
          setIsSaved(true);
       }
    }
    const shareablePostLink = () => {
       const baseUrl = 'http://localhost:5173/post/';
-      const postLink = `${baseUrl}${post.$id}`;
+      const postLink = `${baseUrl}${post?.$id}`;
 
       // Copy the link to the clipboard
       navigator.clipboard.writeText(postLink).then(() => {
          // Show success toast after successfully copying the link
          toast({ title: 'Link copied to clipboard' });
-      }).catch(err => {
+      }).catch(error => {
          // Handle any errors while copying
+         console.error('Error copying link: ', error);
          toast({ title: 'somthing wrong' });
       });
    };
@@ -97,19 +95,12 @@ const PostStats = ({ post, userId }: PostStatsProps) => {
                   />
             }
          </button>
-         <div>
-            <DropdownMenu>
-               <DropdownMenuTrigger>
-                  <img
-                     src="/assets/icons/share.svg"
-                     alt="share"
-                  />
-               </DropdownMenuTrigger>
-               <DropdownMenuContent>
-                  copy link
-               </DropdownMenuContent>
-            </DropdownMenu>
-         </div>
+         <button onClick={shareablePostLink}>
+            <img
+               src="/assets/icons/share.svg"
+               alt="share"
+            />
+         </button>
       </div>
    )
 }

@@ -1,17 +1,19 @@
 import PostForm from "@/components/forms/PostForm"
+import { useNavigate } from "react-router-dom";
 
 const CreatePost = () => {
+  const navigate = useNavigate();
   return (
     <div className="flex flex-1">
       <div className="common-container">
         <div className="max-w-5xl flex-start gap-3 justify-start w-full">
-          <img
-            src="assets/icons/gallery-add.svg"
-            alt="add"
-            width={30}
-            height={30}
-            className="invert-white"
-          />
+          <button onClick={() => navigate(-1)}>
+            <img
+              width={30}
+              src="/assets/icons/arrow.svg"
+              alt="back-btn"
+            />
+          </button>
           <h1 className="h3-bold md:h2-bold text-left w-full">
             Create new post
           </h1>
