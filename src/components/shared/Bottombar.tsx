@@ -6,7 +6,7 @@ const Bottombar = () => {
   const { pathname } = useLocation();
 
   return (
-    <section className="bottom-bar">
+    <section className="bottom-bar fixed">
       {bottombarLinks.map((link: INavLink) => {
         const isActive = pathname === link.route;
         return (

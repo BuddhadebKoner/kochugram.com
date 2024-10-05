@@ -14,7 +14,7 @@ const Home = () => {
             Home Feed
           </h2>
           {
-            isPostLoading && !post ? (
+            isPostLoading && !post && isErrorPosts ? (
               <Loader />
             ) : (
               <ul className="flex flex-1 flex-col w-full gap-3">

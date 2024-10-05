@@ -55,16 +55,6 @@ const PostCard = ({ post }: PostCardProps) => {
                <p className="subtle-semibold lg:small-ragular text-light-3">
                   @{post.creator.username} . {formatDate(post.$createdAt)}
                </p>
-               <Link
-                  className={`absolute right-5 ${user?.id !== post.creator.$id && "hidden"}`}
-                  to={`/update-post/${post.$id}`}
-               >
-                  <img
-                     src="/assets/icons/edit.svg"
-                     width={20}
-                     height={20}
-                     alt="edit" />
-               </Link>
             </div>
             <Link to={`/post/${post.$id}`}>
                <div className="small-medium lg:base-medium py-2">
