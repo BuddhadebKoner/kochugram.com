@@ -1,4 +1,4 @@
-import Loader from "@/components/shared/Loader"
+import BigLoader from "@/components/shared/BigLoader"
 import PostStats from "@/components/shared/PostStats"
 import { useUserContext } from "@/context/AuthContext"
 import { toast } from "@/hooks/use-toast"
@@ -24,7 +24,7 @@ const PostDetails = () => {
    return (
       <div className="post_details-container">
          {
-            isPending ? (<Loader />) : (
+            isPending ? (<BigLoader />) : (
                <>
                   <div className="w-full h-fit flex flex-1 gap-5 justify-center items-center">
                      <button onClick={() => navigate(-1)}>
@@ -54,7 +54,7 @@ const PostDetails = () => {
                            <p className="whitespace-pre-wrap text-light-2">
                               {parseCaption(post?.caption)}
                            </p>
-                           <ul className="mt-1 flex gap-2">
+                           <ul className="mt-1 flex gap-2 flex-wrap">
                               {post?.tags.map((tags: string) => (
                                  <li key={tags} className="text-light-3">
                                     #{tags}

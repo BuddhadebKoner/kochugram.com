@@ -1,3 +1,4 @@
+import BigLoader from "@/components/shared/BigLoader";
 import GreadPostList from "@/components/shared/GreadPostList";
 import Loader from "@/components/shared/Loader";
 import SearchResult from "@/components/shared/SearchResult";
@@ -5,19 +6,21 @@ import { Input } from "@/components/ui/input";
 import useDebounce from "@/hooks/useDbounce";
 import { useGetPosts, useSearchPost } from "@/lib/react-query/queriesAndMutation";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const Explore = () => {
+  const navigate = useNavigate();
   const [searchValue, setSearchValue] = useState("");
   const deBouncedValue = useDebounce(searchValue, 500); // searching delay
   // query params
   const { data: searchedPost, isFetching: isSearchFetching } = useSearchPost(deBouncedValue);
   const { data: posts, fetchNextPage: hasNextPage } = useGetPosts()
 
-  console.log(searchedPost, posts);
+  // console.log(searchedPost, posts);
   if (!posts) {
     return (
       <div className="flex-center w-full h-full">
-        <Loader />
+        <BigLoader />
       </div>
     )
   }
@@ -28,7 +31,19 @@ const Explore = () => {
   return (
     <div className="explore-container">
       <div className="explore-inner_container">
-        <div className="flex gap-1 px-4 w-full rounded-lg bg-dark-4">
+        <div className="max-w-5xl flex-start gap-3 justify-start w-full">
+          <button onClick={() => navigate(-1)}>
+            <img
+              width={30}
+              src="/assets/icons/arrow.svg"
+              alt="back-btn"
+            />
+          </button>
+          <h1 className="h3-bold md:h2-bold text-left w-full">
+            Explore
+          </h1>
+        </div>
+        <div className="flex gap-1 px-4 w-full rounded-full bg-dark-4">
           <img
             src="/assets/icons/search.svg"
             width={24}
@@ -39,6 +54,10 @@ const Explore = () => {
             type="text"
             placeholder="Search"
             className="explore-search"
+            onChange={(e) => {
+              const { value } = e.target;
+              setSearchValue(value);
+            }}
           />
         </div>
         <div className="flex-between w-full max-w-5xl mt-1 mb-7">
@@ -58,7 +77,10 @@ const Explore = () => {
         <div className="flex flex-wrap gap-9 w-full max-w-5xl">
           {
             shouldShowSearchResults ? (
-              <SearchResult />
+              <SearchResult
+                isSearchFetching={isSearchFetching}
+                searchedPost={searchedPost}
+              />
             ) : shouldShowPosts ? (
               <p>
                 No posts available
@@ -69,6 +91,13 @@ const Explore = () => {
           }
         </div>
       </div>
+      {
+        hasNextPage && !searchValue && (
+          <div ref={ref} className="mt-10">
+            <Loader />
+          </div>
+        )
+      }
     </div>
   )
 }

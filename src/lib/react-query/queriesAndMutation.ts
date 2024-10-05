@@ -166,7 +166,6 @@ export const useDeletePost = () => {
 }
 
 //  expore
-
 export const useGetPosts = () => {
    return useInfiniteQuery({
       queryKey: [QUERY_KEYS.GET_INFINITE_POSTS],
@@ -179,9 +178,9 @@ export const useGetPosts = () => {
    })
 }
 
-export const useSearchPost = (searchTurm: string) => { 
+export const useSearchPost = (searchTurm: string) => {
    return useQuery({
-      queryKey: [QUERY_KEYS.SEARCH_POSTS],
+      queryKey: [QUERY_KEYS.SEARCH_POSTS, searchTurm],
       queryFn: () => searchPost(searchTurm),
       enabled: !!searchTurm
    })

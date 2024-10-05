@@ -1,6 +1,7 @@
 import { useUserContext } from "@/context/AuthContext";
 import { Models } from "appwrite"
 import { Link } from "react-router-dom";
+import PostStats from "./PostStats";
 
 type postListProps = {
    posts: Models.Document[];
@@ -8,9 +9,9 @@ type postListProps = {
    showStats?: boolean;
 }
 
-const GreadPostList = ({ posts }: postListProps) => {
+const GreadPostList = ({ posts, showUser = true }: postListProps) => {
    const { user } = useUserContext();
-   
+
    return (
       <ul className="grid-container w-full h-full">
          {
@@ -23,6 +24,21 @@ const GreadPostList = ({ posts }: postListProps) => {
                         className="object-cover w-full h-full"
                      />
                   </Link>
+                  <div className="grid-post_user">
+                     {
+                        showUser && (
+                           <div className="flex items-center justify-start gap-3">
+                              <img
+                                 className="h-8 w-8 rounded-full"
+                                 src={post.creator.imageUrl}
+                                 alt={post.creator.name} />
+                              <p className="line-clamp-1">
+                                 {post.creator.name}
+                              </p>
+                           </div>
+                        )
+                     }
+                  </div>
                </li>
             ))
          }
