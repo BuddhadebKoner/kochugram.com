@@ -1,12 +1,13 @@
 import BigLoader from "@/components/shared/BigLoader";
-import GreadPostList from "@/components/shared/GreadPostList";
+import GreadPostList from "@/components/shared/GridPostList";
 import Loader from "@/components/shared/Loader";
 import SearchResult from "@/components/shared/SearchResult";
 import { Input } from "@/components/ui/input";
 import useDebounce from "@/hooks/useDbounce";
 import { useGetPosts, useSearchPost } from "@/lib/react-query/queriesAndMutation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useInView } from "react-intersection-observer";
 
 const Explore = () => {
   const navigate = useNavigate();
@@ -14,9 +15,15 @@ const Explore = () => {
   const deBouncedValue = useDebounce(searchValue, 500); // searching delay
   // query params
   const { data: searchedPost, isFetching: isSearchFetching } = useSearchPost(deBouncedValue);
-  const { data: posts, fetchNextPage: hasNextPage } = useGetPosts()
-
-  // console.log(searchedPost, posts);
+  const { data: posts, fetchNextPage, hasNextPage } = useGetPosts()
+  const documents = searchedPost?.documents || [];
+  // inView
+  const { ref, inView } = useInView();
+  useEffect(() => {
+    if (inView && !searchValue) {
+      fetchNextPage();
+    }
+  }, [inView, searchValue])
   if (!posts) {
     return (
       <div className="flex-center w-full h-full">
@@ -29,7 +36,7 @@ const Explore = () => {
 
 
   return (
-    <div className="explore-container">
+    <div className="explore-container" >
       <div className="explore-inner_container">
         <div className="max-w-5xl flex-start gap-3 justify-start w-full">
           <button onClick={() => navigate(-1)}>
@@ -79,14 +86,16 @@ const Explore = () => {
             shouldShowSearchResults ? (
               <SearchResult
                 isSearchFetching={isSearchFetching}
-                searchedPost={searchedPost}
+                searchedPost={documents}
               />
             ) : shouldShowPosts ? (
               <p>
                 No posts available
               </p>
             ) : posts.pages.map((item, index) => (
-              <GreadPostList key={`page-${index}`} posts={item.documents} />
+              item ? (
+                <GreadPostList key={`page-${index}`} posts={item.documents} />
+              ) : null
             ))
           }
         </div>
@@ -98,7 +107,7 @@ const Explore = () => {
           </div>
         )
       }
-    </div>
+    </div >
   )
 }
 

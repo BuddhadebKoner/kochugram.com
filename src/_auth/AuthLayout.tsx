@@ -1,5 +1,5 @@
 import Loader from '@/components/shared/Loader';
-import { Suspense, lazy, useState, useEffect } from 'react';
+import { Suspense, useState, useEffect } from 'react';
 import { Outlet, Navigate } from 'react-router-dom'
 
 const AuthLayout = () => {

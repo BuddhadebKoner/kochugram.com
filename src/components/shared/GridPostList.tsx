@@ -1,7 +1,6 @@
-import { useUserContext } from "@/context/AuthContext";
+// import { useUserContext } from "@/context/AuthContext";
 import { Models } from "appwrite"
 import { Link } from "react-router-dom";
-import PostStats from "./PostStats";
 
 type postListProps = {
    posts: Models.Document[];
@@ -10,7 +9,7 @@ type postListProps = {
 }
 
 const GreadPostList = ({ posts, showUser = true }: postListProps) => {
-   const { user } = useUserContext();
+   // const { user } = useUserContext();
 
    return (
       <ul className="grid-container w-full h-full">

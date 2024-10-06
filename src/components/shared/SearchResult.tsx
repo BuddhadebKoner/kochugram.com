@@ -1,26 +1,27 @@
 import { Models } from "appwrite";
 import BigLoader from "./BigLoader";
-import GreadPostList from "./GreadPostList";
+import GreadPostList from "./GridPostList";
 
 type searchPostProps = {
   isSearchFetching: boolean;
-  searchedPost: Models.Document[];
+  searchedPost?: Models.Document[];
 }
 
 const SearchResult = ({ isSearchFetching, searchedPost }: searchPostProps) => {
 
-  if (isSearchFetching) return <BigLoader />
-  if (searchedPost && searchedPost.documents.length > 0) {
+  if (isSearchFetching) return <BigLoader />;
+
+  if (!searchedPost || searchedPost.length === 0) {
     return (
-      <GreadPostList posts={searchedPost.documents} />
-    )
+      <p className="text-light-4 mt-10 text-center w-full">
+        no result found
+      </p>
+    );
   }
 
   return (
-    <p className="text-light-4 mt-10 text-center w-full">
-      no result found
-    </p>
-  )
+    <GreadPostList posts={searchedPost} />
+  );
 }
 
-export default SearchResult
+export default SearchResult;

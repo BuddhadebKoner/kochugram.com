@@ -35,7 +35,7 @@ const PostForm = ({ post, action }: PostFormProps) => {
       resolver: zodResolver(postValidation),
       defaultValues: {
          caption: post ? post?.caption : "",
-         file: [],
+         file: post ? post?.file : "",
          location: post ? post?.location : "",
          tags: post ? post.tags.join(',') : ""
       },

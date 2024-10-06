@@ -49,7 +49,7 @@ const PostDetails = () => {
                            userId={user.id}
                         />
                      </div>
-                     <div className="w-fit mt-5">
+                     <div className="w-full h-full mt-5">
                         <div className="small-medium lg:base-medium py-2">
                            <p className="whitespace-pre-wrap text-light-2">
                               {parseCaption(post?.caption)}

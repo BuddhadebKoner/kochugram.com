@@ -6,13 +6,13 @@ import { useUserContext } from "@/context/AuthContext";
 import { toast } from "@/hooks/use-toast";
 import { sidebarLinks } from '@/constants';
 import { INavLink } from '@/types';
+import Loader from './Loader';
 
 const Leftsidebar = () => {
   const navigate = useNavigate();
   const { pathname } = useLocation();
   const { mutate: signOut, isSuccess } = useSignOutAccount();
-  const { user } = useUserContext();
-
+  const { user, isLoading } = useUserContext();
   useEffect(() => {
     if (isSuccess) {
       navigate('/sign-in');
@@ -31,22 +31,28 @@ const Leftsidebar = () => {
             height={36}
           />
         </Link>
+        {
+          isLoading ? (
+            <Loader />
+          ) : (
+            <Link to={`/profile/${user.id}`} className="w-fit flex gap-5">
+              <img
+                src={user.imageUrl || '/assets/iamges/profile-placeholder.jpg'}
+                alt="profile"
+                className="h-12 w-12 rounded-full"
+              />
+              <div className="flex flex-col">
+                <p className='body-bold'>
+                  {user.name}
+                </p>
+                <p className='small-regular text-light-3'>
+                  @{user.username}
+                </p>
+              </div>
+            </Link>
+          )
+        }
 
-        <Link to={`/profile/${user.id}`} className="w-fit flex gap-5">
-          <img
-            src={user.imageUrl || '/assets/iamges/profile-placeholder.jpg'}
-            alt="profile"
-            className="h-12 w-12 rounded-full"
-          />
-          <div className="flex flex-col">
-            <p className='body-bold'>
-              {user.name}
-            </p>
-            <p className='small-regular text-light-3'>
-              @{user.username}
-            </p>
-          </div>
-        </Link>
 
         <ul className='flex flex-col gap-6'>
           {sidebarLinks.map((link: INavLink) => {
@@ -55,8 +61,7 @@ const Leftsidebar = () => {
               <li
                 key={link.label}
                 className={
-                  `leftsidebar-link group ${
-                  isActive && 'bg-primary-500'
+                  `leftsidebar-link group ${isActive && 'bg-primary-500'
                   }`}
               >
                 <NavLink
