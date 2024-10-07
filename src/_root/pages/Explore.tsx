@@ -24,16 +24,16 @@ const Explore = () => {
       fetchNextPage();
     }
   }, [inView, searchValue])
-  if (!posts) {
+  const shouldShowSearchResults = searchValue !== '';
+  const noPostsAvailable = !shouldShowSearchResults && posts?.pages.every(page => (page?.documents ?? []).length === 0);
+
+  if (!posts && !shouldShowSearchResults) {
     return (
       <div className="flex-center w-full h-full">
         <BigLoader />
       </div>
-    )
+    );
   }
-  const shouldShowSearchResults = searchValue !== '';
-  const shouldShowPosts = !shouldShowSearchResults && posts.pages.every((items) => (items?.documents ?? []).length === 0);
-
 
   return (
     <div className="explore-container" >
@@ -88,15 +88,15 @@ const Explore = () => {
                 isSearchFetching={isSearchFetching}
                 searchedPost={documents}
               />
-            ) : shouldShowPosts ? (
-              <p>
-                No posts available
-              </p>
-            ) : posts.pages.map((item, index) => (
-              item ? (
-                <GreadPostList key={`page-${index}`} posts={item.documents} />
-              ) : null
-            ))
+            ) : noPostsAvailable ? (
+              <p>No posts available</p>
+            ) : (
+              posts?.pages.map((page, index) => (
+                (page?.documents ?? []).length > 0 ? (
+                  <GreadPostList key={`page-${index}`} posts={page?.documents ?? []} />
+                ) : null
+              ))
+            )
           }
         </div>
       </div>

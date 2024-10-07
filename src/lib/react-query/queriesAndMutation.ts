@@ -165,20 +165,19 @@ export const useDeletePost = () => {
    })
 }
 
+//  expore
 export const useGetPosts = () => {
    return useInfiniteQuery({
       queryKey: [QUERY_KEYS.GET_INFINITE_POSTS],
       queryFn: getInFininitePost,
       getNextPageParam: (lastPage) => {
-         if (!lastPage || lastPage.documents.length === 0) return null; 
-
-         const lastId = lastPage.documents[lastPage.documents.length - 1].$id;
-         return lastId ?? null; 
+         if (lastPage && lastPage.documents.length === 0) return null;
+         const lastId = lastPage?.documents[lastPage.documents.length - 1].$id;
+         return lastId?? null;
       },
-      initialPageParam: null,
-   });
-};
-
+      initialPageParam: null
+   })
+}
 
 export const useSearchPost = (searchTurm: string) => {
    return useQuery({

@@ -1,6 +1,7 @@
 import { Models } from "appwrite";
 import BigLoader from "./BigLoader";
 import GreadPostList from "./GridPostList";
+// import { useEffect } from "react";
 
 type searchPostProps = {
   isSearchFetching: boolean;
@@ -8,6 +9,10 @@ type searchPostProps = {
 }
 
 const SearchResult = ({ isSearchFetching, searchedPost }: searchPostProps) => {
+
+  // useEffect(() => {
+  //   console.log(searchedPost);
+  // }, [searchedPost]);
 
   if (isSearchFetching) return <BigLoader />;
 

@@ -382,28 +382,26 @@ export async function deleteSavePosts(savePostsId: string) {
 }
 
 
-export async function getInFininitePost({ pageParam }: { pageParam: string | null }) {
+// explore
+export async function getInFininitePost({ pageParam }: { pageParam?: string | null }) {
    const queries: any[] = [Query.orderDesc('$updatedAt'), Query.limit(10)];
-
    if (pageParam) {
-      queries.push(Query.cursorAfter(pageParam));
+      queries.push(Query.cursorAfter(pageParam.toString()));
+   }
+   try {
+      const posts = await database.listDocuments(
+         appwriteConfig.databaseId,
+         appwriteConfig.postCollectionId,
+         queries
+      )
 
-      try {
-         const posts = await database.listDocuments(
-            appwriteConfig.databaseId,
-            appwriteConfig.postCollectionId,
-            queries
-         );
-
-         if (!posts) throw new Error("No posts found");
-         return posts;
-      } catch (error) {
-         console.log(error);
-         throw error;
-      }
+      if (!posts) throw Error;
+      return posts;
+   } catch (error) {
+      console.log(error)
+      throw error;
    }
 }
-
 
 export async function searchPost(searchTerm: string) {
 
