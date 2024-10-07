@@ -8,7 +8,7 @@ import RootLayout from './_root/RootLayout'
 
 import { Toaster } from "@/components/ui/toaster"
 // all pages
-import { AllUsers, CreatePost, Explore, Home, PostDetails, Profile, Saved, UpdatePost, UpdateProfile } from './_root/pages'
+import { AllUsers, CreatePost, Explore, Home, PostDetails, Profile, Saved, UpdatePost, UpdateProfile, UserLiked, UserPosts, UserSaved } from './_root/pages'
 
 
 function App() {
@@ -29,8 +29,13 @@ function App() {
                <Route path='/create-post' element={<CreatePost />} />
                <Route path='/update-post/:id' element={<UpdatePost />} />
                <Route path='/post/:id' element={<PostDetails />} />
-               <Route path='/profile/:id*' element={<Profile />} />
-               <Route path='/update-profile/:id*' element={<UpdateProfile />} />
+               <Route path='/profile/:id/*' element={<Profile />} >
+                  {/* Nested routes for posts, likes, and saves */}
+                  <Route index element={<UserPosts />} />
+                  <Route path='likes' element={<UserLiked />} />
+                  <Route path='saves' element={<UserSaved />} />
+               </Route>
+               <Route path='/update-profile/:id/*' element={<UpdateProfile />} />
             </Route>
          </Routes>
          <Toaster />

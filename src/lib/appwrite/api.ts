@@ -402,18 +402,49 @@ export async function getInFininitePost({ pageParam }: { pageParam: number }) {
    }
 }
 
-export async function searchPost(searchTerm : string) {
-   
+export async function searchPost(searchTerm: string) {
+
 
    try {
       const posts = await database.listDocuments(
          appwriteConfig.databaseId,
          appwriteConfig.postCollectionId,
-         [Query.search('caption',searchTerm)]
+         [Query.search('caption', searchTerm)]
       )
-   
+
       if (!posts) throw Error;
       return posts;
+   } catch (error) {
+      console.log(error)
+   }
+}
+
+// user
+export async function getUserById(userId: string) {
+   try {
+      const user = await database.getDocument(
+         appwriteConfig.databaseId,
+         appwriteConfig.userCollectonId,
+         userId
+      )
+
+      if (!user) throw Error;
+      return user;
+   } catch (error) {
+      console.log(error)
+   }
+}
+
+export async function getManyUserByIds(userIds: string[]) {
+   try {
+      const users = await database.listDocuments(
+         appwriteConfig.databaseId,
+         appwriteConfig.userCollectonId,
+         [Query.equal('accountId', userIds)]
+      )
+
+      if (!users) throw Error;
+      return users;
    } catch (error) {
       console.log(error)
    }
