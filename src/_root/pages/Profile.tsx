@@ -44,9 +44,9 @@ const Profile = () => {
                               <Loader />
                            ) : (
                               <>
-                                 {CurrentUser?.id !== user?.$id && (
+                                 {/* {CurrentUser?.id !== user?.$id && (
                                     <FollowBtn />
-                                 )}
+                                 )} */}
                                  {/* Show Edit button only for your own profile */}
                                  {CurrentUser?.id === user?.$id && (
                                     <Link to={`/update-profile/${user?.$id}`}>

@@ -3,7 +3,7 @@ import { Link, useOutletContext } from "react-router-dom";
 
 interface UserContextType {
   user: {
-    posts: any[];
+    posts: string[];
     name: string;
     imageUrl: string;
   };
