@@ -8,7 +8,7 @@ type postListProps = {
    showStats?: boolean;
 }
 
-const GreadPostList = ({ posts, showUser = true }: postListProps) => {
+const GridPostList = ({ posts, showUser = true }: postListProps) => {
    // const { user } = useUserContext();
 
    return (
@@ -46,4 +46,4 @@ const GreadPostList = ({ posts, showUser = true }: postListProps) => {
 }
 
 
-export default GreadPostList
+export default GridPostList

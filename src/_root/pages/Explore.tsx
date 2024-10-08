@@ -1,5 +1,5 @@
 import BigLoader from "@/components/shared/BigLoader";
-import GreadPostList from "@/components/shared/GridPostList";
+import GridPostList from "@/components/shared/GridPostList";
 import Loader from "@/components/shared/Loader";
 import SearchResult from "@/components/shared/SearchResult";
 import { Input } from "@/components/ui/input";
@@ -93,7 +93,7 @@ const Explore = () => {
             ) : (
               posts?.pages.map((page, index) => (
                 (page?.documents ?? []).length > 0 ? (
-                  <GreadPostList key={`page-${index}`} posts={page?.documents ?? []} />
+                  <GridPostList key={`page-${index}`} posts={page?.documents ?? []} />
                 ) : null
               ))
             )

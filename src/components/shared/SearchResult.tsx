@@ -1,6 +1,6 @@
 import { Models } from "appwrite";
 import BigLoader from "./BigLoader";
-import GreadPostList from "./GridPostList";
+import GridPostList from "./GridPostList";
 // import { useEffect } from "react";
 
 type searchPostProps = {
@@ -25,7 +25,7 @@ const SearchResult = ({ isSearchFetching, searchedPost }: searchPostProps) => {
   }
 
   return (
-    <GreadPostList posts={searchedPost} />
+    <GridPostList posts={searchedPost} />
   );
 }
 

@@ -3,7 +3,7 @@ import FollowBtn from "@/components/shared/FollowBtn";
 import Loader from "@/components/shared/Loader";
 import { useUserContext } from "@/context/AuthContext";
 import { useGetUserById } from "@/lib/react-query/queriesAndMutation";
-import { Link, Outlet, useNavigate, useParams } from "react-router-dom";
+import { Link, NavLink, Outlet, useNavigate, useParams } from "react-router-dom";
 
 const Profile = () => {
    const navigate = useNavigate();
@@ -23,21 +23,21 @@ const Profile = () => {
                   <button onClick={() => navigate(-1)}>
                      <img width={30} src="/assets/icons/arrow.svg" alt="back-btn" />
                   </button>
-                  <p className="text-2xl text-left w-full">
+                  <p className="body-medium  text-left w-full">
                      {user?.name}
                   </p>
                </div>
                <div className="max-w-5xl flex gap-6 lg:gap-10 w-full">
                   <img
-                     className="w-20 h-20 rounded-full"
+                     className="w-14 h-14 rounded-full md:w-18 md:h-18 lg:w-20 lg:h-20"
                      src={user?.imageUrl}
                      alt={user?.name}
                   />
                   <div className="flex flex-col w-full">
                      <div className=" flex flex-1 w-full justify-between">
                         <div className="flex flex-col w-full">
-                           <h2 className="text-xl md:text-2xl font-bold text-left w-full">{user?.name}</h2>
-                           <p className="subtle-semibold lg:small-ragular text-light-3">@{user?.username}</p>
+                           <h2 className="body-medium lg:h3-bold  font-bold text-left w-full">{user?.name}</h2>
+                           <p className="subtle-semibold lg:small-semibold text-light-3">@{user?.username}</p>
                         </div>
                         <div className="flex">
                            {currentUserLoading ? (
@@ -45,12 +45,8 @@ const Profile = () => {
                            ) : (
                               <>
                                  {CurrentUser?.id !== user?.$id && (
-                                    <FollowBtn
-                                       followingUser={user}
-                                       currentUser={CurrentUser}
-                                    />
+                                    <FollowBtn />
                                  )}
-
                                  {/* Show Edit button only for your own profile */}
                                  {CurrentUser?.id === user?.$id && (
                                     <Link to={`/update-profile/${user?.$id}`}>
@@ -66,8 +62,8 @@ const Profile = () => {
                            )}
                         </div>
                      </div>
-                     <p className="my-2">bio : {user?.bio}</p>
-                     <div className="w-full h-fit flex gap-5 my-2">
+                     <p className="my-2 small-medium lg:body-medium ">bio : {user?.bio}</p>
+                     <div className="w-full h-fit flex gap-5 my-2 small-medium lg:body-medium ">
                         <p>{user?.posts.length} posts</p>
                         <p>{user?.followers.length} followers</p>
                         <p>{user?.following.length} following</p>
@@ -75,25 +71,39 @@ const Profile = () => {
                   </div>
                </div>
                <div className="max-w-5xl flex gap-6 lg:gap-10 w-full">
-                  <Link
-                     className="w-fit h-fit"
-                     to={""}>
+                  <NavLink
+                     className={({ isActive }) =>
+                        `w-fit h-fit ${isActive ? "font-bold text-primary-500" : ""}`
+                     }
+                     to={`/profile/${user?.$id}`}  // Explicitly target the index route
+                     end  // Ensures only exact path matches (i.e., /profile/:id)
+                  >
                      Posts
-                  </Link>
-                  <Link
-                     className="w-fit h-fit"
-                     to={`/profile/${user?.$id}/likes`}>
+                  </NavLink>
+                  <NavLink
+                     className={({ isActive }) =>
+                        `w-fit h-fit ${isActive ? "font-bold text-primary-500" : ""}`
+                     }
+                     to={`/profile/${user?.$id}/likes`}
+                  >
                      Likes
-                  </Link>
-                  <Link
-                     className="w-fit h-fit"
-                     to={`/profile/${user?.$id}/saves`}>
+                  </NavLink>
+                  <NavLink
+                     className={({ isActive }) =>
+                        `w-fit h-fit ${isActive ? "font-bold text-primary-500" : ""}`
+                     }
+                     to={`/profile/${user?.$id}/saves`}
+                  >
                      Saves
-                  </Link>
+                  </NavLink>
                </div>
+
                <section>
-                  <Outlet />
+                  <Outlet context={{ user }} />
                </section>
+               <div className="flex flex-1 w-full h-fit items-center justify-center">
+                  <p>Thanks for contributing</p>
+               </div>
             </div>
          )}
       </>
