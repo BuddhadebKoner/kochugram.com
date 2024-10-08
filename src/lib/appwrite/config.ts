@@ -14,6 +14,8 @@ export const appwriteConfig = {
    saveCollectionId: import.meta.env.VITE_APPWRITE_SAVE_COLLECTION_ID,
    userCollectonId: import.meta.env.VITE_APPWRITE_USER_COLLECTION_ID,
    postCollectionId: import.meta.env.VITE_APPWRITE_POST_COLLECTION_ID,
+   userFollowingID: import.meta.env.VITE_APPWRITE_FOLLOWING_ID,
+   userFollowerID: import.meta.env.VITE_APPWRITE_FOLLOWERS_ID,
 };
 
 export const client = new Client();

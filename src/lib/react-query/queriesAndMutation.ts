@@ -79,6 +79,7 @@ export const useLikePost = () => {
       }
    })
 }
+
 export const useSavePost = () => {
    const queryClient = useQueryClient();
    return useMutation({
@@ -173,7 +174,7 @@ export const useGetPosts = () => {
       getNextPageParam: (lastPage) => {
          if (lastPage && lastPage.documents.length === 0) return null;
          const lastId = lastPage?.documents[lastPage.documents.length - 1].$id;
-         return lastId?? null;
+         return lastId ?? null;
       },
       initialPageParam: null
    })

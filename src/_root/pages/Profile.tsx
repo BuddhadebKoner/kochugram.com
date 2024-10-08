@@ -1,6 +1,6 @@
 import BigLoader from "@/components/shared/BigLoader";
+import FollowBtn from "@/components/shared/FollowBtn";
 import Loader from "@/components/shared/Loader";
-import { Button } from "@/components/ui/button";
 import { useUserContext } from "@/context/AuthContext";
 import { useGetUserById } from "@/lib/react-query/queriesAndMutation";
 import { Link, Outlet, useNavigate, useParams } from "react-router-dom";
@@ -23,9 +23,9 @@ const Profile = () => {
                   <button onClick={() => navigate(-1)}>
                      <img width={30} src="/assets/icons/arrow.svg" alt="back-btn" />
                   </button>
-                  <h1 className="h3-bold md:h2-bold text-left w-full">
+                  <p className="text-2xl text-left w-full">
                      {user?.name}
-                  </h1>
+                  </p>
                </div>
                <div className="max-w-5xl flex gap-6 lg:gap-10 w-full">
                   <img
@@ -36,7 +36,7 @@ const Profile = () => {
                   <div className="flex flex-col w-full">
                      <div className=" flex flex-1 w-full justify-between">
                         <div className="flex flex-col w-full">
-                           <h2 className="h3-bold md:h2-bold text-left w-full">{user?.name}</h2>
+                           <h2 className="text-xl md:text-2xl font-bold text-left w-full">{user?.name}</h2>
                            <p className="subtle-semibold lg:small-ragular text-light-3">@{user?.username}</p>
                         </div>
                         <div className="flex">
@@ -44,9 +44,11 @@ const Profile = () => {
                               <Loader />
                            ) : (
                               <>
-                                 {/* Show Follow button if viewing someone else's profile */}
                                  {CurrentUser?.id !== user?.$id && (
-                                    <Button className="shad-button_primary">Follow</Button>
+                                    <FollowBtn
+                                       followingUser={user}
+                                       currentUser={CurrentUser}
+                                    />
                                  )}
 
                                  {/* Show Edit button only for your own profile */}
