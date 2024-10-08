@@ -1,5 +1,5 @@
 import BigLoader from "@/components/shared/BigLoader";
-import FollowBtn from "@/components/shared/FollowBtn";
+// import FollowBtn from "@/components/shared/FollowBtn";
 import Loader from "@/components/shared/Loader";
 import { useUserContext } from "@/context/AuthContext";
 import { useGetUserById } from "@/lib/react-query/queriesAndMutation";
