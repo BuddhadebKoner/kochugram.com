@@ -12,7 +12,7 @@ import GridUsersList from "@/components/shared/GridUsersList";
 const AllUsers = () => {
   const navigate = useNavigate();
   const [searchValue, setSearchValue] = useState("");
-  const deBouncedValue = useDebounce(searchValue, 500); // searching delay
+  const deBouncedValue = useDebounce(searchValue, 500); 
   // query params
   const { data: searchedPost, isFetching: isSearchFetching } = useSearchUsers(deBouncedValue);
   const { data: users, fetchNextPage, hasNextPage } = useGetUsers();
@@ -38,7 +38,7 @@ const AllUsers = () => {
   return (
     <div className="explore-container" >
       <div className="explore-inner_container">
-        <div className="max-w-5xl flex-start gap-3 justify-start w-full">
+        <div className="max-w-5xl flex-start gap-5 justify-start w-full">
           <button onClick={() => navigate(-1)}>
             <img
               width={30}
@@ -47,7 +47,7 @@ const AllUsers = () => {
             />
           </button>
           <h1 className="h3-bold md:h2-bold text-left w-full">
-            Explore
+            People
           </h1>
         </div>
         <div className="flex gap-1 px-4 w-full rounded-full bg-dark-4">
@@ -80,25 +80,23 @@ const AllUsers = () => {
           </div>
         </div>
       </div>
-      <div>
-        <div className="flex flex-wrap gap-9 w-full max-w-5xl">
-          {
-            shouldShowSearchResults ? (
-              <UserSearchResult
-                isSearchFetching={isSearchFetching}
-                searchedPost={documents}
-              />
-            ) : noPostsAvailable ? (
-              <p>No posts available</p>
-            ) : (
-              users?.pages.map((page, index) => (
-                (page?.documents ?? []).length > 0 ? (
-                  <GridUsersList key={`page-${index}`} posts={page?.documents ?? []} />
-                ) : null
-              ))
-            )
-          }
-        </div>
+      <div className="flex flex-wrap gap-9 w-full max-w-5xl">
+        {
+          shouldShowSearchResults ? (
+            <UserSearchResult
+              isSearchFetching={isSearchFetching}
+              searchedPost={documents}
+            />
+          ) : noPostsAvailable ? (
+            <p>No posts available</p>
+          ) : (
+            users?.pages.map((page, index) => (
+              (page?.documents ?? []).length > 0 ? (
+                <GridUsersList key={`page-${index}`} posts={page?.documents ?? []} />
+              ) : null
+            ))
+          )
+        }
       </div>
       {
         hasNextPage && !searchValue && (

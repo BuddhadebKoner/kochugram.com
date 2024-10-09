@@ -102,24 +102,20 @@ export async function signInAccount(user: { email: string; password: string }) {
 export async function getCurrentUser() {
    try {
       const currentAccount = await account.get();
-      // console.log(currentAccount);
       if (!currentAccount) {
          return null;
       }
-
       const currentUser = await database.listDocuments(
          appwriteConfig.databaseId,
          appwriteConfig.userCollectonId,
          [Query.equal('accountId', currentAccount.$id)]
       );
-
       if (currentUser.documents.length === 0) {
-         return null;
+         throw Error;
       }
       return currentUser.documents[0];
    } catch (error) {
       console.error("Error fetching current user:", error);
-      return null;
    }
 }
 
@@ -227,14 +223,18 @@ export async function deleteFile(fileId: string) {
 
 
 export async function getRecentPost() {
-   const posts = await database.listDocuments(
-      appwriteConfig.databaseId,
-      appwriteConfig.postCollectionId,
-      [Query.orderDesc('$createdAt'), Query.limit(20)]
-   )
+   try {
+      const posts = await database.listDocuments(
+         appwriteConfig.databaseId,
+         appwriteConfig.postCollectionId,
+         [Query.orderDesc('$createdAt'), Query.limit(20)]
+      )
 
-   if (!posts) throw Error;
-   return posts;
+      if (!posts) throw Error;
+      return posts;
+   } catch (error) {
+      console.log(error)
+   }
 }
 export async function getPostById(postId: string) {
    try {

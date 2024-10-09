@@ -46,7 +46,7 @@ export const useCreatePost = () => {
 export const useGetRecentPost = () => {
    return useQuery({
       queryKey: [QUERY_KEYS.GET_RECENT_POSTS],
-      queryFn: getRecentPost
+      queryFn: getRecentPost,
    })
 }
 
@@ -134,6 +134,16 @@ export const useGetCurrentUser = () => {
    });
 };
 
+export const useGetCurrentUserPosts = () => {
+   return useQuery({
+      queryKey: [QUERY_KEYS.GET_CURRENT_USER],
+      queryFn: getCurrentUser,
+      staleTime: 1000 * 60 * 5,
+      refetchOnWindowFocus: false,
+   });
+};
+
+
 export const useGetPostById = (postId: string) => {
    return useQuery({
       queryKey: [QUERY_KEYS.GET_POST_BY_ID, postId],
@@ -171,6 +181,8 @@ export const useGetPosts = () => {
    return useInfiniteQuery({
       queryKey: [QUERY_KEYS.GET_INFINITE_POSTS],
       queryFn: getInFininitePost,
+      staleTime: 1000 * 60 * 5,
+      refetchOnWindowFocus: false,
       getNextPageParam: (lastPage) => {
          if (lastPage && lastPage.documents.length === 0) return null;
          const lastId = lastPage?.documents[lastPage.documents.length - 1].$id;
@@ -184,6 +196,8 @@ export const useGetUsers = () => {
    return useInfiniteQuery({
       queryKey: [QUERY_KEYS.GET_USERS],
       queryFn: getInfiniteUsers,
+      staleTime: 1000 * 60 * 5,
+      refetchOnWindowFocus: false,
       getNextPageParam: (lastPage) => {
          if (lastPage && lastPage.documents.length === 0) return null;
          const lastId = lastPage?.documents[lastPage.documents.length - 1].$id;
@@ -212,7 +226,9 @@ export const useGetUserById = (userId: string) => {
    return useQuery({
       queryKey: [QUERY_KEYS.GET_USER_BY_ID, userId],
       queryFn: () => getUserById(userId),
-      enabled: !!userId
+      enabled: !!userId,
+      staleTime: 1000 * 60 * 5,
+      refetchOnWindowFocus: false,
    })
 }
 
