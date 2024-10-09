@@ -22,7 +22,6 @@ const UserLiked = () => {
   useEffect(() => {
     if (user?.liked) {
       setLiked(user.liked);
-      console.log(user.liked);
     }
   }, [liked]);
 

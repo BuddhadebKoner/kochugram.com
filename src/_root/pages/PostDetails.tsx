@@ -20,7 +20,6 @@ const PostDetails = () => {
       navigate(-1);
       toast({ title: 'post deleted sucessfully' })
    }
-
    return (
       <div className="post_details-container">
          {

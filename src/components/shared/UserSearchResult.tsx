@@ -18,8 +18,7 @@ const UserSearchResult = ({ isSearchFetching, searchedPost }: searchPostProps) =
       </p>
     );
   }
-   console.log(searchedPost);
-
+  //  console.log(searchedPost);
   return (
     <GridUsersList posts={searchedPost} />
   );

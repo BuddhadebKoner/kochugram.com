@@ -38,7 +38,7 @@ const PostCard = ({ post }: PostCardProps) => {
    if (!post.creator) return;
 
    return (
-      <div className="post-card flex flex-1 flex-row gap-5 relative">
+      <div className="post-card">
          <div className="w-fit h-fit">
             <Link to={`/profile/${post.creator.$id}`}>
                <img
@@ -49,7 +49,7 @@ const PostCard = ({ post }: PostCardProps) => {
                   alt={post.creator.name} />
             </Link>
          </div>
-         <div className="flex flex-1 flex-col ">
+         <div className="flex flex-1 flex-col max-w-[70vw] h-fit ">
             <div className="flex flex-1 gap-2 ">
                <p className="base-medium lg:body-bold text-light-1">{post.creator.name}</p>
                <p className="subtle-semibold lg:small-ragular text-light-3">
