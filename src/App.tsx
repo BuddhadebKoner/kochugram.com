@@ -10,7 +10,6 @@ import { Toaster } from "@/components/ui/toaster"
 // all pages
 import { AllUsers, CreatePost, Explore, Home, PostDetails, Profile, Saved, UpdatePost, UpdateProfile, UserLiked, UserPosts, UserSaved } from './_root/pages'
 
-
 function App() {
    return (
       <main className='flex h-screen'>

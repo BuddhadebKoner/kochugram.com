@@ -18,6 +18,7 @@ const AuthLayout = () => {
     };
   }, [isMobile]);
 
+
   return (
     <>
       {
@@ -25,21 +26,21 @@ const AuthLayout = () => {
           <Navigate to="/" />
         ) : (
           <>
-            <section className='flex flex-1 justify-center items-center flex-col py-10'>
-              <Outlet />
-            </section>
             <div className='hidden xl:block h-screen w-1/2 object-cover bg-no-repeat bg-black'>
               {/* Conditionally render Spline only for non-mobile devices */}
               {!isMobile && (
-                  <Suspense fallback={<Loader />}>
-                    <img
-                      className='h-full w-full object-cover'
-                      src="abstract-image.jpg"
-                      alt=""
-                    />
+                <Suspense fallback={<Loader />}>
+                  <img
+                    className='h-full w-full object-cover'
+                    src="abstract-image.jpg"
+                    alt=""
+                  />
                 </Suspense>
-              )} 
+              )}
             </div>
+            <section className='flex flex-1 justify-center items-center flex-col py-10'>
+              <Outlet />
+            </section>
           </>
         )
       }

@@ -49,6 +49,10 @@ export type IUser = {
   bio: string;
 };
 
+export type IUserWithImageId = IUser & {
+  imageId: string;
+};
+
 export type INewUser = {
   name: string;
   email: string;
@@ -56,7 +60,7 @@ export type INewUser = {
   password: string;
 };
 export interface Document {
-  $id: string; 
+  $id: string;
   title: string;
   content: string;
   createdAt: string;
@@ -64,6 +68,6 @@ export interface Document {
 }
 
 export interface DocumentList<T> {
-  documents: T[]; 
+  documents: T[];
   total: number;
 }

@@ -1,5 +1,5 @@
 import { ID, ImageGravity } from "appwrite";
-import { INewPost, INewUser, IUpdatePost } from "@/types";
+import { INewPost, INewUser, IUpdatePost, IUpdateUser } from "@/types";
 import { account, appwriteConfig, avatars, database, storage } from "./config";
 import { Query } from "appwrite";
 
@@ -310,6 +310,58 @@ export async function updatePost(post: IUpdatePost) {
       console.error("Error updating post:", error);
       throw error;  // Re-throw to handle the error in higher levels
    }
+}
+export async function updateUser(user: IUpdateUser) {
+   console.log("user in updateUser :", user);
+   const hasFileToUpdate = user.file && user.file.size > 0;
+
+   try {
+      let image = {
+         imageUrl: user.imageUrl,
+         imageId: user.imageId,
+      };
+
+      if (hasFileToUpdate) {
+         const uploadedFile = await uploadfile(user.file);
+         if (!uploadedFile) throw new Error("File upload failed");
+
+         // Get new file URL
+         const fileUrl = getFilePreview(uploadedFile.$id);
+         if (!fileUrl) {
+            await deleteFile(uploadedFile.$id); 
+            throw new Error("Failed to generate file URL");
+         }
+
+         image = { imageUrl: fileUrl, imageId: uploadedFile.$id };
+      }
+
+      const updatedUser = await database.updateDocument(
+         appwriteConfig.databaseId,
+         appwriteConfig.userCollectonId,
+         user.userId,
+         {
+            name: user.name,
+            bio: user.bio,
+            imageUrl: image.imageUrl,
+            imageId: image.imageId,
+         }
+      );
+      if (!updatedUser) {
+         if (hasFileToUpdate) {
+            await deleteFile(image.imageId); 
+         }
+         throw new Error("Failed to update user");
+      }
+      if (hasFileToUpdate && user.imageId) {
+         await deleteFile(user.imageId); 
+      }
+
+      return updatedUser;
+   } catch (error) {
+      console.error("Error updating user:", error);
+      throw error; 
+   }
+   
 }
 
 export async function deletePost(postId: string, imageId: string) {
