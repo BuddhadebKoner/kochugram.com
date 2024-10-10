@@ -5,7 +5,7 @@
 
 **Website:** [Kochu-Media](https://kochugram.rajislab.com)  
 **Start Date:** 28 September 2024  
-**End Date:** Ongoing  
+**End Date:** 10 October 2024
 
 ---
 
