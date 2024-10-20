@@ -8,7 +8,7 @@ import RootLayout from './_root/RootLayout'
 
 import { Toaster } from "@/components/ui/toaster"
 // all pages
-import { AllUsers, CreatePost, Explore, Home, PostDetails, Profile, Saved, UpdatePost, UpdateProfile, UserLiked, UserPosts, UserSaved } from './_root/pages'
+import { AllUsers, Bookmarks, CreatePost, Explore, Home, PostDetails, Profile, Saved, UpdatePost, UpdateProfile, UserLiked, UserPosts, UserSaved } from './_root/pages'
 
 function App() {
    return (
@@ -22,6 +22,7 @@ function App() {
             {/* private routes */}
             <Route element={<RootLayout />}>
                <Route index element={<Home />} />
+               <Route path='/bookmarks' element={<Bookmarks />} />
                <Route path='/explore' element={<Explore />} />
                <Route path='/all-users' element={<AllUsers />} />
                <Route path='/saved' element={<Saved />} />

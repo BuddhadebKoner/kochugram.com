@@ -1,4 +1,5 @@
 import BigLoader from "@/components/shared/BigLoader"
+import PostComments from "@/components/shared/PostComments"
 import PostStats from "@/components/shared/PostStats"
 import { useUserContext } from "@/context/AuthContext"
 import { toast } from "@/hooks/use-toast"
@@ -13,6 +14,10 @@ const PostDetails = () => {
 
    const { id } = useParams()
    const { data: post, isPending } = useGetPostById(id || '')
+   // useEffect(() => {
+   //    console.log('post', post);
+   // }, [post, navigate])
+
    const { user } = useUserContext()
 
    const handleDeletePost = () => {
@@ -22,27 +27,29 @@ const PostDetails = () => {
    }
    return (
       <div className="post_details-container">
+         <div className="w-full h-fit flex gap-5">
+            <button onClick={() => navigate(-1)}>
+               <img
+                  width={30}
+                  src="/assets/icons/arrow.svg"
+                  alt="back-btn"
+               />
+            </button>
+            {
+               isPending ? (null) : (
+                  <h3 className="h3-bold md:h2-bold text-left w-full">Post</h3>
+               )
+            }
+         </div>
          {
             isPending ? (<BigLoader />) : (
-               <>
-                  <div className="w-full h-fit flex flex-1 gap-5 justify-center items-center">
-                     <button onClick={() => navigate(-1)}>
+               <div className="w-full h-full flex flex-col lg:flex-row">
+                  <div className="flex flex-col mt-5 h-fit w-full lg:w-1/2 items-center">
+                     <div className="w-fit max-h-xl">
                         <img
-                           width={30}
-                           src="/assets/icons/arrow.svg"
-                           alt="back-btn"
-                        />
-                     </button>
-                     <h3 className="h3-bold md:h2-bold text-left w-full">Post</h3>
-                  </div>
-                  <div className="w-full h-full flex flex-col lg:flex-row lg:gap-20">
-                     <div className="flex flex-col mt-5 h-fit">
-                        <div className="w-full h-fit">
-                           <img
-                              src={post?.imageUrl}
-                              className="post-card_details"
-                              alt={post?.caption} />
-                        </div>
+                           src={post?.imageUrl}
+                           className="post-card_details"
+                           alt={post?.caption} />
                         <PostStats
                            post={post}
                            userId={user.id}
@@ -66,14 +73,6 @@ const PostDetails = () => {
                         </div>
                         <div className="w-full h-fit flex mt-5 items-center lg:gap-10">
                            <div className="flex w-full gap-5 items-center">
-                              <Link to={`/profile/${post?.creator.$id}`}>
-                                 <img
-                                    src={post?.creator?.imageUrl || 'assets/images/profile-placeholder.jpg'}
-                                    width={30}
-                                    height={30}
-                                    className="rounded-full"
-                                    alt={post?.creator.name} />
-                              </Link>
                               <Link to={`/profile/${post?.creator.$id}`}>
                                  <p className="base-medium lg:body-bold text-light-1">{post?.creator.name}</p>
                                  <p className="subtle-semibold lg:small-ragular text-light-3">
@@ -104,7 +103,12 @@ const PostDetails = () => {
                         </div>
                      </div>
                   </div>
-               </>
+                  <PostComments
+                     allComments={post?.comments}
+                     postId={post?.$id}
+                     userId={user?.id}
+                  />
+               </div>
             )
          }
       </div>

@@ -1,68 +1,64 @@
-import { Link, useNavigate, } from "react-router-dom"
+import { Link, NavLink, useLocation } from "react-router-dom";
+import { INavLink } from "@/types";
+import { getBookmarksLinks } from "@/constants";
 import { useUserContext } from "@/context/AuthContext";
-import Loader from "./Loader";
-import { Button } from "../ui/button";
-import { useSignOutAccount } from "@/lib/react-query/queriesAndMutation";
-import { useEffect } from "react";
-import { toast } from "@/hooks/use-toast";
 
 const Topbar = () => {
+   const { user, isLoading } = useUserContext();  // Fetch user from context
+   const { pathname } = useLocation();
 
-   const navigate = useNavigate();
-
-   const { user, isLoading } = useUserContext();
-   const { mutate: signOut, isSuccess, isPending: isLogouting } = useSignOutAccount();
-
-   useEffect(() => {
-      if (isSuccess) {
-         navigate('/sign-in');
-         toast({ title: 'Logged out successfully' });
-      }
-   }, [isSuccess, navigate]);
+   const BookmarksLinks = getBookmarksLinks(user);
 
    return (
-      <section className="topbar">
-         <div className="flex-between py-4 px-5">
-            <Link to="/" className="flex gap-3 items-center">
-               <img
-                  src="/assets/images/logo.svg"
-                  alt="logo"
-                  width={130}
-                  height={325}
-               />
-            </Link>
-            <div className="flex gap-4">
-               <Button
-                  variant={"ghost"}
-                  className="shad-button_ghost gap-2 flex items-center justify-start w-fit"
-                  onClick={() => signOut()}
-               >
-                  {
-                     isLogouting ? (<Loader />) : (
-                        <img
-                           src="/assets/icons/logout.svg"
-                           alt=""
-                           width={30}
-                           height={30}
-                        />
-                     )
-                  }
-               </Button>
-               <Link to={`/profile/${user.id}`} className="flex-center gap-3">
-                  {
-                     isLoading ? (<Loader />) : (
-                        <img
-                           src={user.imageUrl || '/assets/iamges/profile-placeholder.jpg'}
-                           alt="profile"
-                           className="h-8 w-8 rounded-full"
-                        />
-                     )
-                  }
+      <>
+         <div className="topbar flex">
+            <div className="flex-between pt-3 px-5">
+               <Link to="/" className="flex items-center">
+                  <img
+                     src="/assets/images/logo.svg"
+                     alt="logo"
+                     width={120}
+                     height={315}
+                  />
+               </Link>
+               <Link to={"/bookmarks"} className="flex-center">
+                  <img
+                     width={30}
+                     height={30}
+                     src="/assets/icons/menu.svg"
+                     alt="hamburgur"
+                  />
                </Link>
             </div>
+            <div className="flex justify-between w-full bottom-0 pb-2 px-2">
+               {BookmarksLinks.map((link: INavLink) => {
+                  const isActive = isLoading || pathname === link.route;
+                  return (
+                     <NavLink
+                        key={link.route}
+                        to={isLoading ? "#" : link.route}  // Disable link navigation when loading
+                        className={
+                           `${isActive ? 'rounded-[10px] invert-white' : ''} flex-center flex-col gap-1 p-2 transition-all duration-200`
+                        }
+                        style={{
+                           pointerEvents: isLoading ? "none" : "auto",  // Disable clicking when loading
+                           opacity: isLoading ? 0.6 : 1,  // Optionally dim the links when loading
+                        }}
+                     >
+                        <img
+                           src={link.imgURL}
+                           alt={link.label}
+                           width={22}
+                           height={22}
+                           className={`group-hover:invert-white ${isActive ? 'invert-white' : ''}`}
+                        />
+                     </NavLink>
+                  );
+               })}
+            </div>
          </div>
-      </section>
-   )
-}
+      </>
+   );
+};
 
-export default Topbar
+export default Topbar;

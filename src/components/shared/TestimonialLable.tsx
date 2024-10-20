@@ -4,7 +4,7 @@ const TestimonialLabel = () => {
          <p className="text-lg font-semibold mb-2">
             Thank you for visiting Kochu-Media
          </p>
-         <p className="text-sm text-gray-400">
+         <p className="text-sm text-gray-400 pt-2 pb-5">
             If you found my work helpful, consider giving it a star on GitHub.
          </p>
          <a

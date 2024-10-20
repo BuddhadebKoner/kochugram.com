@@ -40,19 +40,21 @@ const PostCard = ({ post }: PostCardProps) => {
    return (
       <div className="post-card">
          <div className="w-fit h-fit">
-            <Link to={`/profile/${post.creator.$id}`}>
+            <Link to={`/profile/${post.creator.$id}`} className="flex items-center justify-center">
                <img
                   src={post?.creator?.imageUrl || 'assets/images/profile-placeholder.jpg'}
                   width={40}
                   height={40}
-                  className="rounded-full"
-                  alt={post.creator.name} />
+                  className="rounded-full object-cover z-10"
+                  alt={post.creator.name}
+                  style={{ aspectRatio: '1/1' }}
+               />
             </Link>
          </div>
          <div className="flex flex-1 flex-col max-w-[70vw] h-fit ">
             <div className="flex flex-1 gap-2 ">
-               <p className="base-medium lg:body-bold text-light-1">{post.creator.name}</p>
-               <p className="subtle-semibold lg:small-ragular text-light-3">
+               <p className="post-creater-name">{post.creator.name}</p>
+               <p className="post-creater-username">
                   @{post.creator.username} . {formatDate(post.$createdAt)}
                </p>
             </div>
@@ -63,17 +65,28 @@ const PostCard = ({ post }: PostCardProps) => {
                   </p>
                   <ul className="mt-2">
                      {post.tags.map((tags: string) => (
-                        <li key={tags} className="text-light-3">
-                           #{tags}
-                        </li>
+                        <>
+                           {
+                              tags === "" ? null : (
+                                 <li key={tags} className="text-light-3">
+                                    #{tags}
+                                 </li>
+                              )
+                           }
+
+                        </>
                      ))}
                   </ul>
                </div>
                <div className="w-full h-fit">
-                  <img
-                     src={post.imageUrl}
-                     className="post-card_img"
-                     alt={post.caption} />
+                  {
+                     post.imageUrl === "" ? null : (
+                        <img
+                           src={post.imageUrl}
+                           className="post-card_img"
+                           alt={post.caption} />
+                     )
+                  }
                </div>
             </Link>
             <PostStats

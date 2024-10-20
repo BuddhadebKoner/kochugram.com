@@ -4,6 +4,7 @@ import { Models } from "appwrite";
 import { useEffect, useState } from "react";
 import Loader from "./Loader";
 import { toast } from "@/hooks/use-toast";
+import { useNavigate } from "react-router-dom";
 
 
 
@@ -15,13 +16,14 @@ const PostStats = ({ post, userId }: PostStatsProps) => {
    const likesList = post?.likes.map((user: Models.Document) => user.$id);
    const [likes, setLikes] = useState(likesList);
    const [isSaved, setIsSaved] = useState(false);
+   const navigate = useNavigate();
 
    const { mutate: likePost, isPending: isLikeing } = useLikePost();
    const { mutate: savePost, isPending: isSavingPost } = useSavePost();
    const { mutate: deleetPost, isPending: isDeletingSavePost } = useDeleteSavePost();
 
    const { data: currentUser } = useGetCurrentUser();
-   const savePostRecord = currentUser?.save.find((record: Models.Document) => record.post.$id === post?.$id);
+   const savePostRecord = currentUser?.save.find((record: Models.Document) => record.post && record.post.$id === post?.$id);
 
    useEffect(() => {
       setIsSaved(!!savePostRecord); // here !! is used to convert the value to boolean
@@ -53,11 +55,11 @@ const PostStats = ({ post, userId }: PostStatsProps) => {
             savePost({ postId: post.$id, userId });
             setIsSaved(true);
          }
-         setIsSaved(true);
       }
    }
+
    const shareablePostLink = () => {
-      const baseUrl = 'http://localhost:5173/post/';
+      const baseUrl = 'https://kochugram.rajislab.com/post/';
       const postLink = `${baseUrl}${post?.$id}`;
 
       // Copy the link to the clipboard
@@ -73,20 +75,39 @@ const PostStats = ({ post, userId }: PostStatsProps) => {
 
 
    return (
-      <div className="flex flex-1 gap-5 justify-center items-center h-fit">
-         <button className="flex flex-1 gap-2 items-center">
-            {isLikeing ? <Loader /> :
+      <div className="flex flex-1 justify-between items-center h-fit">
+         <div className="w-fit flex gap-5">
+            <button className="flex flex-1 gap-2 items-center">
+               {isLikeing ? <Loader /> :
+                  <img
+                     onClick={handleLikePosts}
+                     src={checkIsLiked(likes, userId) ?
+                        "/assets/icons/liked.svg" :
+                        "/assets/icons/like.svg"
+                     }
+                     alt="like"
+                  />
+               }
+               <p className="small-medium lg:base-medium">{likes.length}</p>
+            </button>
+            <button
+               onClick={() => {
+                  navigate(`/post/${post?.$id}`)
+               }}
+               className="flex flex-1 gap-2 items-center">
                <img
-                  onClick={handleLikePosts}
-                  src={checkIsLiked(likes, userId) ?
-                     "/assets/icons/liked.svg" :
-                     "/assets/icons/like.svg"
-                  }
-                  alt="save"
+                  src="/assets/icons/comment.svg"
+                  alt="comment-icon"
                />
-            }
-            <p className="small-medium lg:base-medium">{likes.length}</p>
-         </button>
+               <p className="small-medium lg:base-medium">{post?.comments.length}</p>
+            </button>
+            <button onClick={shareablePostLink}>
+               <img
+                  src="/assets/icons/share.svg"
+                  alt="share"
+               />
+            </button>
+         </div>
          <button onClick={handleSavePosts}>
             {
                isDeletingSavePost || isSavingPost ? <Loader /> :
@@ -94,12 +115,6 @@ const PostStats = ({ post, userId }: PostStatsProps) => {
                      src={isSaved ? "/assets/icons/saved.svg" : "/assets/icons/save.svg"}
                   />
             }
-         </button>
-         <button onClick={shareablePostLink}>
-            <img
-               src="/assets/icons/share.svg"
-               alt="share"
-            />
          </button>
       </div>
    )

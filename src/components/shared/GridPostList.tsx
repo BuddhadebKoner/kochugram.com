@@ -27,13 +27,17 @@ const GridPostList = ({ posts, showUser = true }: postListProps) => {
                      {
                         showUser && (
                            <div className="flex items-center justify-start gap-3">
-                              <img
-                                 className="h-8 w-8 rounded-full"
-                                 src={post.creator.imageUrl}
-                                 alt={post.creator.name} />
-                              <p className="line-clamp-1">
-                                 {post.creator.name}
-                              </p>
+                              {post.creator && (
+                                 <>
+                                    <img
+                                       className="h-8 w-8 rounded-full"
+                                       src={post.creator.imageUrl}
+                                       alt={post.creator.name} />
+                                    <p className="line-clamp-1">
+                                       {post.creator.name}
+                                    </p>
+                                 </>
+                              )}
                            </div>
                         )
                      }

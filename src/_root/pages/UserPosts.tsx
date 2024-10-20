@@ -20,7 +20,7 @@ const UserPosts = () => {
 
   if (!posts || posts.length === 0) {
     return (
-      <div>
+      <div className="w-full h-full flex justify-center items-center">
         <p>No posts yet</p>
       </div>
     );

@@ -32,7 +32,7 @@ const AuthLayout = () => {
                 <Suspense fallback={<Loader />}>
                   <img
                     className='h-full w-full object-cover'
-                    src="abstract-image.jpg"
+                    src="abstract-image.webp"
                     alt=""
                   />
                 </Suspense>

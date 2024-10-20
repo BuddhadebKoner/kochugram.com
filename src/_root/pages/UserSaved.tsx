@@ -33,16 +33,18 @@ const UserSaved = () => {
   }
 
   return (
-    <ul className="grid-container-profile w-full h-full">
+    <ul className="grid-container-profile max-w-5xl flex-start">
       {
         save.map((savedItem) => (
           <li key={savedItem.$id} className="rrelative w-full h-full">
             <Link to={`/post/${savedItem.$id}`} className="grid-post_link_profile">
-              <img
-                src={savedItem.post.imageUrl}
-                alt={savedItem.caption}
-                className="object-cover w-full h-full"
-              />
+              {savedItem.post && (
+                <img
+                  src={savedItem.post.imageUrl}
+                  alt={savedItem.caption}
+                  className="object-cover w-full h-full"
+                />
+              )}
             </Link>
           </li>
         ))

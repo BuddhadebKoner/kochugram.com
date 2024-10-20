@@ -7,33 +7,20 @@ const Saved = () => {
   const navigate = useNavigate();
   const { data: user, isFetching: isLoading } = useGetCurrentUserPosts();
   const [save, setSave] = useState<
-    { $id: string; post: {
-      $id: Key | null | undefined;
-      caption: string | undefined; imageUrl: string 
-}; caption: string }[]
+    {
+      $id: string; post: {
+        $id: Key | null | undefined;
+        caption: string | undefined; imageUrl: string
+      }; caption: string
+    }[]
   >([]);
 
   useEffect(() => {
     if (user && user.save) {
       setSave(user.save);
-      console.log('user.save', user)
+      // console.log('user.save', user)
     }
   }, [user]);
-
-  if (isLoading) {
-    return <BigLoader />;
-  }
-
-  if (!save || save.length === 0) {
-    return (
-      <div className="common-container">
-        <h2 className="h3-bold md:h2-bold text-left w-full px-4">
-          Saved Posts
-        </h2>
-        <p>No saves yet</p>
-      </div>
-    );
-  }
 
   return (
     <div className="common-container">
@@ -45,24 +32,53 @@ const Saved = () => {
             alt="back-btn"
           />
         </button>
-        <h1 className="h3-bold md:h2-bold text-left w-full">
-          Saved post
-        </h1>
+        {
+          isLoading ? (null) : (
+            <h1 className="h3-bold md:h2-bold text-left w-full">
+              Saved post
+            </h1>
+          )
+        }
       </div>
-      <ul className="grid grid-cols-3 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-        {save.map((savedItem) => (
-          <li key={savedItem.post.$id} className="relative">
-            <Link to={`/post/${savedItem.post.$id}`} className="grid-post_link_profile block overflow-hidden rounded-lg">
-              <img
-                src={savedItem.post.imageUrl}
-                alt={savedItem.post.caption}
-                className="object-cover w-full sm:h-56 md:h-64 lg:h-72 rounded-[10px]"
-              />
-            </Link>
-          </li>
-        ))}
-      </ul>
-      <p>Add more</p>
+      {
+        isLoading ? (
+          <BigLoader />
+        ) : (
+          <>
+            <ul className="grid grid-cols-3 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-1 max-w-5xl">
+              {save.map((savedItem) => (
+                savedItem.post ? ( // Check if savedItem.post exists
+                  <li key={savedItem.post.$id} className="relative">
+                    <Link to={`/post/${savedItem.post.$id}`} className="grid-post_link_profile block overflow-hidden rounded-lg">
+                      <img
+                        src={savedItem.post.imageUrl}
+                        alt={savedItem.post.caption}
+                        className="object-cover w-full sm:h-56 md:h-64 lg:h-72 rounded-[10px]"
+                      />
+                    </Link>
+                  </li>
+                ) : (
+                  <h1>no saved are there</h1>
+                )
+              ))}
+            </ul>
+            {
+              save.length > 0 ? (
+                <p>Add more</p>
+              ) : (
+                <p>No saved post yet</p>
+              )
+            }
+          </>
+        )
+      }
+      {
+        !save || save.length === 0 || isLoading && (
+          <div className="w-full h-full flex justify-center items-center">
+            <p>No saved post yet</p>
+          </div>
+        )
+      }
     </div>
   );
 };
