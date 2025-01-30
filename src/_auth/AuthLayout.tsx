@@ -32,7 +32,7 @@ const AuthLayout = () => {
                 <Suspense fallback={<Loader />}>
                   <img
                     className='h-full w-full object-cover'
-                    src="abstract-image.webp"
+                    src="https://cloud.appwrite.io/v1/storage/buckets/66f8e10b0034b56b85be/files/679afde50012b5357f4b/view?project=66f8cb12003c2ead11e2&mode=admin"
                     alt=""
                   />
                 </Suspense>

@@ -10,7 +10,7 @@ gsap.registerPlugin(ScrollTrigger);
 
 const RootLayout = () => {
   const [isLoading, setIsLoading] = useState(true);
-  const [isOnline, setIsOnline] = useState(navigator.onLine); // Check initial network statez
+  const [isOnline, setIsOnline] = useState(navigator.onLine);
 
   useEffect(() => {
     // Check the initial document.readyState
